@@ -16,7 +16,7 @@ namespace HiAssetBundle
                 Directory.Delete(fileFolder, true);
             Directory.CreateDirectory(fileFolder);
             CopyUpdateFiles();
-            BuildAssetBundles(); 
+            BuildAssetBundles();
             GenerateFileInfo();
             Debug.Log("build finish");
         }
@@ -66,6 +66,7 @@ namespace HiAssetBundle
                 info = info.Replace("\\", "/");
                 string newfile = info.Replace(updatePath, string.Empty);
                 string newpath = outPath + newfile;
+                newpath = newpath.Replace(" ", string.Empty);
                 string path = Path.GetDirectoryName(newpath);
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);

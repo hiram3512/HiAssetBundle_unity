@@ -104,7 +104,6 @@ namespace HiAssetBundle
             if (needUpdate)
             {
                 string downloadUrl = url + "/" + updateList[0];
-                //downloadUrl = downloadUrl.Replace(" ", string.Empty);
                 WWWDownloadMgr.instance.StartDownload(downloadUrl, FinishDownloadFile);
             }
             else
