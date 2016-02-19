@@ -38,21 +38,20 @@ namespace HiAssetBundle
         private void SetNewDic()
         {
             string fileUrl = url + "/" + AssetBundleUtility.fileName;
+            fileUrl = fileUrl.Replace(" ", string.Empty);
             WWWDownloadMgr.instance.StartDownload(fileUrl, FinishDownloadFileInfo);
         }
         private void FinishDownloadFileInfo(WWW paramWWW)
         {
             newDic.Clear();
             string text = paramWWW.text;
-            string[] lines = text.Split(new char[] { '\r','\n'});
+            string[] lines = text.Split(new char[] { '\r', '\n' });
             foreach (string paramLine in lines)
             {
                 if (string.IsNullOrEmpty(paramLine))
                     continue;
                 string[] keyValue = paramLine.Split('|');
-                keyValue[0] = keyValue[0].Replace(" ", string.Empty);
-                keyValue[1] = keyValue[1].Replace(" ", string.Empty);
-                newDic.Add(keyValue[0], keyValue[1]);
+                newDic.Add(keyValue[0].Trim(), keyValue[1].Trim());
             }
             GetUpdateDic();
         }
@@ -105,6 +104,7 @@ namespace HiAssetBundle
             if (needUpdate)
             {
                 string downloadUrl = url + "/" + updateList[0];
+                downloadUrl = downloadUrl.Replace(" ", string.Empty);
                 WWWDownloadMgr.instance.StartDownload(downloadUrl, FinishDownloadFile);
             }
             else
