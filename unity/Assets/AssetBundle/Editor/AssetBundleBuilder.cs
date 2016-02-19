@@ -16,8 +16,9 @@ namespace HiAssetBundle
                 Directory.Delete(fileFolder, true);
             Directory.CreateDirectory(fileFolder);
             CopyUpdateFiles();
-            BuildAssetBundles();
+            BuildAssetBundles(); 
             GenerateFileInfo();
+            Debug.Log("build finish");
         }
 
         [MenuItem("AssetBundles/Clean User's Data", false, 1)]
@@ -26,6 +27,7 @@ namespace HiAssetBundle
             string path = AssetBundleUtility.GetFileFolder();
             if (Directory.Exists(path))
                 Directory.Delete(path, true);
+            Debug.Log("clean finish");
         }
 
         [MenuItem("AssetBundles/Simulate Server", false, 2)]
@@ -38,26 +40,31 @@ namespace HiAssetBundle
             if (Directory.Exists(directory))
                 Directory.Delete(directory, true);
             Directory.Move(AssetBundleUtility.GetFileOutPutFolder(), directory);
-
+            AssetDatabase.Refresh();
+            Debug.Log("simulate finish");
         }
         private static void CopyUpdateFiles()
         {
-            string luaPath = Application.dataPath + "/" + AssetBundleUtility.updateFolderName;
-            if (!Directory.Exists(luaPath))
+            string updatePath = Application.dataPath + "/" + AssetBundleUtility.updateFolderName;
+            if (!Directory.Exists(updatePath))
                 return;
+            DirectoryInfo directoryInfo = new DirectoryInfo(updatePath);
+            FileInfo[] fileInfos = directoryInfo.GetFiles("*.*", SearchOption.AllDirectories);
             string outPath = AssetBundleUtility.GetFileOutPutFolder() + "/" + AssetBundleUtility.updateFolderName;
             if (Directory.Exists(outPath))
                 Directory.Delete(outPath, true);
             Directory.CreateDirectory(outPath);
-            DirectoryInfo directoryInfo = new DirectoryInfo(luaPath);
-            FileInfo[] fileInfos = directoryInfo.GetFiles("*.*", SearchOption.AllDirectories);
+            float total, processed = 0;
+            total = fileInfos.Length;
             foreach (FileInfo paramFileInfo in fileInfos)
             {
+                processed++;
+                EditorUtility.DisplayProgressBar("CopyFile", "Progress", processed / total);
                 string info = paramFileInfo.FullName;
                 if (info.EndsWith(".meta"))
                     continue;
                 info = info.Replace("\\", "/");
-                string newfile = info.Replace(luaPath, string.Empty);
+                string newfile = info.Replace(updatePath, string.Empty);
                 string newpath = outPath + newfile;
                 string path = Path.GetDirectoryName(newpath);
                 if (!Directory.Exists(path))
@@ -66,6 +73,7 @@ namespace HiAssetBundle
                     File.Delete(newpath);
                 File.Copy(info, newpath, true);
             }
+            EditorUtility.ClearProgressBar();
         }
         private static void BuildAssetBundles()
         {
@@ -86,17 +94,21 @@ namespace HiAssetBundle
             FileInfo[] fileInfos = directoryInfo.GetFiles("*.*", SearchOption.AllDirectories);
             FileStream stream = new FileStream(fileInfoPath, FileMode.CreateNew);
             StreamWriter writer = new StreamWriter(stream);
+            float total, processed = 0;
+            total = fileInfos.Length;
             foreach (FileInfo paramFileInfo in fileInfos)
             {
+                processed++;
+                EditorUtility.DisplayProgressBar("GenerateFile", "Progress", processed / total);
                 string fileInfo = paramFileInfo.FullName;
                 string md5 = AssetBundleUtility.GetMd5(fileInfo);
                 fileInfo = fileInfo.Replace("\\", "/");
                 fileInfo = fileInfo.Replace(fileFolder + "/", string.Empty);
                 writer.WriteLine(fileInfo + "|" + md5);
             }
+            EditorUtility.ClearProgressBar();
             writer.Close();
             stream.Close();
-            AssetDatabase.Refresh();
         }
     }
 }
