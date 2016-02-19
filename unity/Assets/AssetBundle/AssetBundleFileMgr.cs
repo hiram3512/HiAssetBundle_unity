@@ -44,7 +44,7 @@ namespace HiAssetBundle
         {
             newDic.Clear();
             string text = paramWWW.text;
-            string[] lines = text.Split('\n');
+            string[] lines = text.Split(new char[] { '\r','\n'});
             foreach (string paramLine in lines)
             {
                 if (string.IsNullOrEmpty(paramLine))
