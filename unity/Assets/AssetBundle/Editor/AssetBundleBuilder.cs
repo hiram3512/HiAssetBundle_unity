@@ -16,7 +16,7 @@ namespace HiAssetBundle
                 Directory.Delete(fileFolder, true);
             Directory.CreateDirectory(fileFolder);
             CopyUpdateFiles();
-            BuildAssetBundles(); 
+            BuildAssetBundles();
             GenerateFileInfo();
             Debug.Log("build finish");
         }
@@ -104,6 +104,7 @@ namespace HiAssetBundle
                 string md5 = AssetBundleUtility.GetMd5(fileInfo);
                 fileInfo = fileInfo.Replace("\\", "/");
                 fileInfo = fileInfo.Replace(fileFolder + "/", string.Empty);
+                fileInfo = fileInfo.Replace(" ", string.Empty);
                 writer.WriteLine(fileInfo + "|" + md5);
             }
             EditorUtility.ClearProgressBar();

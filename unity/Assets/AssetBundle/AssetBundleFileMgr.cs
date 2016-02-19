@@ -50,7 +50,9 @@ namespace HiAssetBundle
                 if (string.IsNullOrEmpty(paramLine))
                     continue;
                 string[] keyValue = paramLine.Split('|');
-                newDic.Add(keyValue[0].Trim(), keyValue[1].Trim());
+                keyValue[0] = keyValue[0].Replace(" ", string.Empty);
+                keyValue[1] = keyValue[1].Replace(" ", string.Empty);
+                newDic.Add(keyValue[0], keyValue[1]);
             }
             GetUpdateDic();
         }
