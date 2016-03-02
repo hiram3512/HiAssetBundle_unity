@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Example : MonoBehaviour
 {
-    AssetBundleFileMgr mgr = new AssetBundleFileMgr();
+    FileUpdateMgr mgr = new FileUpdateMgr();
     // Use this for initialization
     void Start()
     {

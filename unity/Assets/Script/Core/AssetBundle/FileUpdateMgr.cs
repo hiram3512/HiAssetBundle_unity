@@ -4,7 +4,7 @@ using System.IO;
 using UnityEngine;
 namespace HiAssetBundle
 {
-    public class AssetBundleFileMgr : IDisposable
+    public class FileUpdateMgr : IDisposable
     {
         public bool needUpdate { get { return updateList.Count > 0; } }
         public float overallProgress { get; private set; }
@@ -19,8 +19,8 @@ namespace HiAssetBundle
         {
             url = paramUrl;
             finishCallBack = paramCallBack;
-            downloaderObj = new GameObject("WWWDownloadMgr");
-            downloaderObj.AddComponent<WWWDownloadMgr>();
+            downloaderObj = new GameObject("WWWManager");
+            downloaderObj.AddComponent<WWWLoader>();
             SetNewDic();
         }
         #region only for test, will simulate update file from streamingAsset folder to user's data folder
@@ -39,7 +39,7 @@ namespace HiAssetBundle
         {
             string fileUrl = url + "/" + AssetBundleUtility.fileName;
             fileUrl = fileUrl.Replace(" ", string.Empty);
-            WWWDownloadMgr.instance.StartDownload(fileUrl, FinishDownloadFileInfo);
+            WWWLoader.instance.StartDownload(fileUrl, FinishDownloadFileInfo);
         }
         private void FinishDownloadFileInfo(WWW paramWWW)
         {
@@ -104,7 +104,7 @@ namespace HiAssetBundle
             if (needUpdate)
             {
                 string downloadUrl = url + "/" + updateList[0];
-                WWWDownloadMgr.instance.StartDownload(downloadUrl, FinishDownloadFile);
+                WWWLoader.instance.StartDownload(downloadUrl, FinishDownloadFile);
             }
             else
                 Finish();
@@ -132,7 +132,7 @@ namespace HiAssetBundle
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        ~AssetBundleFileMgr()
+        ~FileUpdateMgr()
         {
             Dispose(false);
         }
