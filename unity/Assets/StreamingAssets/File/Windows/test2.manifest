@@ -1,0 +1,33 @@
+ManifestFileVersion: 0
+CRC: 521390859
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 79c40c4a4f001c2412c0f6da089dd563
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 79de9cd6c44d42cb62c211b36630d0fc
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 135
+  Script: {instanceID: 0}
+Assets:
+- Assets/Example/Sphere.prefab
+Dependencies:
+- D:/MyGit/github/HiAssetBundle_unity/unity/File/Windows/common

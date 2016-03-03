@@ -12,15 +12,12 @@ namespace HiAssetBundle
         private Action finishCallBack;
         private Dictionary<string, string> newDic = new Dictionary<string, string>();
         private List<string> updateList = new List<string>();
-        private GameObject downloaderObj;
         private float totalCount;
         private bool disposed;
         public void Init(string paramUrl, Action paramCallBack)
         {
             url = paramUrl;
             finishCallBack = paramCallBack;
-            downloaderObj = new GameObject("WWWManager");
-            downloaderObj.AddComponent<WWWLoader>();
             SetNewDic();
         }
         #region only for test, will simulate update file from streamingAsset folder to user's data folder
@@ -143,7 +140,6 @@ namespace HiAssetBundle
             if (paramDisposing)
             {
                 finishCallBack = null;
-                MonoBehaviour.Destroy(downloaderObj);
             }
             disposed = true;
         }

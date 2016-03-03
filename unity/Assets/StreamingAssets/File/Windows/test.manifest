@@ -1,0 +1,33 @@
+ManifestFileVersion: 0
+CRC: 2725804309
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 2f4d5f22784ad43cf7f911a82821165f
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 29611c1c41d12cc150d42a4efce42d3b
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+Assets:
+- Assets/Example/Cube.prefab
+Dependencies:
+- D:/MyGit/github/HiAssetBundle_unity/unity/File/Windows/common

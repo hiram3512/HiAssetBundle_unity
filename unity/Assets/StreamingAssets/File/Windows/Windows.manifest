@@ -1,0 +1,14 @@
+ManifestFileVersion: 0
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: common
+      Dependencies: {}
+    Info_1:
+      Name: test2
+      Dependencies:
+        Dependency_0: common
+    Info_2:
+      Name: test
+      Dependencies:
+        Dependency_0: common

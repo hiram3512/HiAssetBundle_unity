@@ -82,6 +82,9 @@ namespace HiIO
         {
             try
             {
+                string directory = Path.GetDirectoryName(paramPath);
+                if (!Directory.Exists(directory))
+                    Directory.CreateDirectory(directory);
                 using (FileStream fs = new FileStream(paramPath, FileMode.Create, FileAccess.Write))
                 {
                     fs.Write(paramBytes, 0, paramBytes.Length);

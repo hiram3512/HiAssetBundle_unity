@@ -6,16 +6,22 @@ using UnityEngine;
 using System.Collections;
 using HiAssetBundle;
 
-public class NewBehaviourScript : MonoBehaviour
+
+public class Example1 : MonoBehaviour
 {
 
     // Use this for initialization
     void Start()
     {
         FileLocalMgr mgr = new FileLocalMgr();
-        mgr.Init(Test);
+        mgr.Init(FinishLocalFile);
     }
-    void Test()
+    void FinishLocalFile()
+    {
+        FileUpdateMgr mgr = new FileUpdateMgr();
+        mgr.SimulateServer_OnlyForTest(FinishUpdate);
+    }
+    void FinishUpdate()
     {
         Debug.Log("finish");
     }

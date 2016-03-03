@@ -20,7 +20,10 @@ public class WWWLoader : MonoBehaviour
     }
     public void Startload(string downloadUrl, Action<WWW> callBackHandler = null)
     {
-        StartCoroutine(Load(downloadUrl, callBackHandler));
+        lock(this)
+        {
+            StartCoroutine(Load(downloadUrl, callBackHandler));
+        }
     }
     private IEnumerator Load(string downloadUrl, Action<WWW> callBackHandler)
     {

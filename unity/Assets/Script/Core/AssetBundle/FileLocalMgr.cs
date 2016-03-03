@@ -28,6 +28,7 @@ public class FileLocalMgr
         IOManager.Instance.ReadFileFromStreamingAssetsPath(filePath, GetFileInfoFinish);
     }
     private Action handler;
+    private byte[] fileInfoBytes;
     private string[] liens;
     private int index;
     private string fileOutPutPath;
@@ -35,6 +36,7 @@ public class FileLocalMgr
     {
         if (param.text.Length > 0)
         {
+            fileInfoBytes = param.bytes;
             liens = param.text.Split(new char[] { '\r', '\n' });
             GetFile();
         }
@@ -50,22 +52,29 @@ public class FileLocalMgr
             {
                 string[] keyValue = liens[index].Split('|');
                 string fileName = keyValue[0].Trim();
+                string filePath = AssetBundleUtility.fileFolderName + "/" + fileName;
                 fileOutPutPath = AssetBundleUtility.GetFileFolder() + "/" + fileName;
-                IOManager.Instance.ReadFileFromStreamingAssetsPath(fileName, GetFileFinish);
+                IOManager.Instance.ReadFileFromStreamingAssetsPath(filePath, GetFileFinish);
             }
         }
         else
+        {
+            string path = AssetBundleUtility.fileFolderName + "/" + AssetBundleUtility.fileName;
+            IOManager.Instance.WriteFileToPersistentDataPath(path, fileInfoBytes);
             handler();
+        }
     }
     void GetFileFinish(WWW param)
     {
+        index++;
         IOManager.Instance.WriteFile(fileOutPutPath, param.bytes);
         GetFile();
     }
-    public void DelateFileFolder()
+    public IEnumerator DelateFileFolder()
     {
         string directory = AssetBundleUtility.GetFileFolder();
         if (Directory.Exists(directory))
             Directory.Delete(directory, true);
+        yield return new WaitForSeconds(0.2f);
     }
 }

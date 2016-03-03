@@ -1,7 +1,7 @@
 ﻿using HiAssetBundle;
 using UnityEngine;
 
-public class Example : MonoBehaviour
+public class Example2 : MonoBehaviour
 {
     FileUpdateMgr mgr = new FileUpdateMgr();
     // Use this for initialization
