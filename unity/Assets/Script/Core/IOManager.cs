@@ -53,7 +53,7 @@ namespace HiIO
 
         public byte[] ReadFileFromPersistentDataPath(string param)
         {
-            param = Application.persistentDataPath + param;
+            param = Application.persistentDataPath + "/" + param;
             return ReadFile(param);
         }
         public byte[] ReadFile(string param)
@@ -75,7 +75,7 @@ namespace HiIO
         }
         public void WriteFileToPersistentDataPath(string paramPath, byte[] paramBytes)
         {
-            paramPath = Application.persistentDataPath + paramPath;
+            paramPath = Application.persistentDataPath + "/" + paramPath;
             WriteFile(paramPath, paramBytes);
         }
         public void WriteFile(string paramPath, byte[] paramBytes)
@@ -104,18 +104,6 @@ namespace HiIO
             string path = Application.streamingAssetsPath;
 #endif
             return path;
-
-
-            //if ((Application.platform == RuntimePlatform.WindowsEditor) || (Application.platform == RuntimePlatform.OSXEditor))
-            //    return Application.streamingAssetsPath + "/";
-            //else if ((Application.platform == RuntimePlatform.WindowsWebPlayer) || (Application.platform == RuntimePlatform.OSXWebPlayer))
-            //    return "StreamingAssets/";
-            //else if (Application.platform == RuntimePlatform.IPhonePlayer)
-            //    return Application.dataPath + "/Raw/";
-            //else if (Application.platform == RuntimePlatform.Android)
-            //    return "jar:file://" + Application.dataPath + "!/assets/" + "/";
-            //else
-            //    return "Cann't distinguish your platform";
         }
     }
 }
