@@ -39,7 +39,7 @@ namespace HiAssetBundle
         {
             string fileUrl = url + "/" + AssetBundleUtility.fileName;
             fileUrl = fileUrl.Replace(" ", string.Empty);
-            WWWLoader.instance.StartDownload(fileUrl, FinishDownloadFileInfo);
+            WWWLoader.Instance.Startload(fileUrl, FinishDownloadFileInfo);
         }
         private void FinishDownloadFileInfo(WWW paramWWW)
         {
@@ -104,7 +104,7 @@ namespace HiAssetBundle
             if (needUpdate)
             {
                 string downloadUrl = url + "/" + updateList[0];
-                WWWLoader.instance.StartDownload(downloadUrl, FinishDownloadFile);
+                WWWLoader.Instance.Startload(downloadUrl, FinishDownloadFile);
             }
             else
                 Finish();

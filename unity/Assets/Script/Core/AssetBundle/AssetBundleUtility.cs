@@ -43,7 +43,7 @@ namespace HiAssetBundle
             return directory;
         }
 #if UNITY_EDITOR
-        public static string GetFileOutPutFolder()
+        public static string GetFileOutPutFolder_OnlyForEditor()
         {
             return Application.dataPath.Substring(0, Application.dataPath.IndexOf("/Assets")) + "/" + fileFolderName;
         }

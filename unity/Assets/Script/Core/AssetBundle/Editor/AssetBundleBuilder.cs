@@ -8,10 +8,10 @@ namespace HiAssetBundle
     {
         private static BuildAssetBundleOptions options = BuildAssetBundleOptions.UncompressedAssetBundle;
 
-        [MenuItem("AssetBundles/Build", false, 0)]
+        [MenuItem("AssetBundles/Build AssetBundle", false, 0)]
         public static void Build()
         {
-            string fileFolder = AssetBundleUtility.GetFileOutPutFolder();
+            string fileFolder = AssetBundleUtility.GetFileOutPutFolder_OnlyForEditor();
             if (Directory.Exists(fileFolder))
                 Directory.Delete(fileFolder, true);
             Directory.CreateDirectory(fileFolder);
@@ -21,27 +21,13 @@ namespace HiAssetBundle
             Debug.Log("build finish");
         }
 
-        [MenuItem("AssetBundles/Clean User's Data", false, 1)]
+        [MenuItem("AssetBundles/Clean User's Data", false, 3)]
         public static void Clean()
         {
             string path = AssetBundleUtility.GetFileFolder();
             if (Directory.Exists(path))
                 Directory.Delete(path, true);
             Debug.Log("clean finish");
-        }
-
-        [MenuItem("AssetBundles/Simulate Server", false, 2)]
-        public static void Simulate()
-        {
-            Build();
-            if (!Directory.Exists(Application.streamingAssetsPath))
-                Directory.CreateDirectory(Application.streamingAssetsPath);
-            string directory = Application.streamingAssetsPath + "/" + AssetBundleUtility.fileFolderName;
-            if (Directory.Exists(directory))
-                Directory.Delete(directory, true);
-            Directory.Move(AssetBundleUtility.GetFileOutPutFolder(), directory);
-            AssetDatabase.Refresh();
-            Debug.Log("simulate finish");
         }
         private static void CopyUpdateFiles()
         {
@@ -50,7 +36,7 @@ namespace HiAssetBundle
                 return;
             DirectoryInfo directoryInfo = new DirectoryInfo(updatePath);
             FileInfo[] fileInfos = directoryInfo.GetFiles("*.*", SearchOption.AllDirectories);
-            string outPath = AssetBundleUtility.GetFileOutPutFolder() + "/" + AssetBundleUtility.updateFolderName;
+            string outPath = AssetBundleUtility.GetFileOutPutFolder_OnlyForEditor() + "/" + AssetBundleUtility.updateFolderName;
             if (Directory.Exists(outPath))
                 Directory.Delete(outPath, true);
             Directory.CreateDirectory(outPath);
@@ -78,7 +64,7 @@ namespace HiAssetBundle
         }
         private static void BuildAssetBundles()
         {
-            string outPath = AssetBundleUtility.GetFileOutPutFolder() + "/" +
+            string outPath = AssetBundleUtility.GetFileOutPutFolder_OnlyForEditor() + "/" +
                 AssetBundleUtility.GetPlatformName(EditorUserBuildSettings.activeBuildTarget);
             if (Directory.Exists(outPath))
                 Directory.Delete(outPath, true);
@@ -87,7 +73,7 @@ namespace HiAssetBundle
         }
         private static void GenerateFileInfo()
         {
-            string fileFolder = AssetBundleUtility.GetFileOutPutFolder();
+            string fileFolder = AssetBundleUtility.GetFileOutPutFolder_OnlyForEditor();
             DirectoryInfo directoryInfo = new DirectoryInfo(fileFolder);
             string fileInfoPath = fileFolder + "/" + AssetBundleUtility.fileName;
             if (File.Exists(fileInfoPath))
@@ -110,6 +96,19 @@ namespace HiAssetBundle
             EditorUtility.ClearProgressBar();
             writer.Close();
             stream.Close();
+        }
+        [MenuItem("AssetBundles/Copy to StreamingAsset", false, 3)]
+        public static void CopyFileToStreamingAsset()
+        {
+            Build();
+            if (!Directory.Exists(Application.streamingAssetsPath))
+                Directory.CreateDirectory(Application.streamingAssetsPath);
+            string directory = Application.streamingAssetsPath + "/" + AssetBundleUtility.fileFolderName;
+            if (Directory.Exists(directory))
+                Directory.Delete(directory, true);
+            Directory.Move(AssetBundleUtility.GetFileOutPutFolder_OnlyForEditor(), directory);
+            AssetDatabase.Refresh();
+            Debug.Log("simulate finish");
         }
     }
 }

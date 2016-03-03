@@ -1,24 +1,33 @@
-﻿using UnityEngine;
+﻿//****************************************************************************
+// Description:
+// Author: hiramtan@qq.com
+//****************************************************************************
+using UnityEngine;
 using System.Collections;
 using System;
 
 public class WWWLoader : MonoBehaviour
 {
-    public static WWWLoader instance;
-
-    void Awake()
+    private static WWWLoader instance;
+    public static WWWLoader Instance
     {
-        instance = this;
+        get
+        {
+            if (instance == null)
+                instance = new GameObject("WWWLoader").AddComponent<WWWLoader>();
+            return instance;
+        }
     }
-    public void StartDownload(string downloadUrl, Action<WWW> callBack = null)
+    public void Startload(string downloadUrl, Action<WWW> callBackHandler = null)
     {
-        StartCoroutine(DownLoad(downloadUrl, callBack));
+        StartCoroutine(Load(downloadUrl, callBackHandler));
     }
-    private IEnumerator DownLoad(string downloadUrl, Action<WWW> callBack)
+    private IEnumerator Load(string downloadUrl, Action<WWW> callBackHandler)
     {
         WWW www = new WWW(downloadUrl);
-        yield return www;
-        if (callBack != null)
-            callBack(www);
+        while (!www.isDone)
+            yield return www;
+        if (callBackHandler != null)
+            callBackHandler(www);
     }
 }
