@@ -8,73 +8,77 @@ using HiAssetBundle;
 using System.IO;
 using System;
 using HiIO;
-public class FileLocalMgr
+
+namespace HiAssetBundle
 {
-    public void Init(Action param)
+    public class FileLocalMgr
     {
-        handler = param;
-        string filePath = AssetBundleUtility.GetFileFolder() + "/" + AssetBundleUtility.fileName;
-        if (File.Exists(filePath))
-            handler();
-        else
+        public void Init(Action param)
         {
-            DelateFileFolder();
-            GetFileInfo();
-        }
-    }
-    void GetFileInfo()
-    {
-        string filePath = AssetBundleUtility.fileFolderName + "/" + AssetBundleUtility.fileName;
-        IOManager.Instance.ReadFileFromStreamingAssetsPath(filePath, GetFileInfoFinish);
-    }
-    private Action handler;
-    private byte[] fileInfoBytes;
-    private string[] liens;
-    private int index;
-    private string fileOutPutPath;
-    void GetFileInfoFinish(WWW param)
-    {
-        if (param.text.Length > 0)
-        {
-            fileInfoBytes = param.bytes;
-            liens = param.text.Split(new char[] { '\r', '\n' });
-            GetFile();
-        }
-        else
-            handler();
-    }
-    void GetFile()
-    {
-        if (liens.Length > index)
-        {
-            if (string.IsNullOrEmpty(liens[index])) { index++; GetFile(); }
+            handler = param;
+            string filePath = AssetBundleUtility.GetFileFolder() + "/" + AssetBundleUtility.fileName;
+            if (File.Exists(filePath))
+                handler();
             else
             {
-                string[] keyValue = liens[index].Split('|');
-                string fileName = keyValue[0].Trim();
-                string filePath = AssetBundleUtility.fileFolderName + "/" + fileName;
-                fileOutPutPath = AssetBundleUtility.GetFileFolder() + "/" + fileName;
-                IOManager.Instance.ReadFileFromStreamingAssetsPath(filePath, GetFileFinish);
+                DelateFileFolder();
+                GetFileInfo();
             }
         }
-        else
+        void GetFileInfo()
         {
-            string path = AssetBundleUtility.fileFolderName + "/" + AssetBundleUtility.fileName;
-            IOManager.Instance.WriteFileToPersistentDataPath(path, fileInfoBytes);
-            handler();
+            string filePath = AssetBundleUtility.fileFolderName + "/" + AssetBundleUtility.fileName;
+            IOManager.Instance.ReadFileFromStreamingAssetsPath(filePath, GetFileInfoFinish);
         }
-    }
-    void GetFileFinish(WWW param)
-    {
-        index++;
-        IOManager.Instance.WriteFile(fileOutPutPath, param.bytes);
-        GetFile();
-    }
-    public IEnumerator DelateFileFolder()
-    {
-        string directory = AssetBundleUtility.GetFileFolder();
-        if (Directory.Exists(directory))
-            Directory.Delete(directory, true);
-        yield return new WaitForSeconds(0.2f);
+        private Action handler;
+        private byte[] fileInfoBytes;
+        private string[] liens;
+        private int index;
+        private string fileOutPutPath;
+        void GetFileInfoFinish(WWW param)
+        {
+            if (param.text.Length > 0)
+            {
+                fileInfoBytes = param.bytes;
+                liens = param.text.Split(new char[] { '\r', '\n' });
+                GetFile();
+            }
+            else
+                handler();
+        }
+        void GetFile()
+        {
+            if (liens.Length > index)
+            {
+                if (string.IsNullOrEmpty(liens[index])) { index++; GetFile(); }
+                else
+                {
+                    string[] keyValue = liens[index].Split('|');
+                    string fileName = keyValue[0].Trim();
+                    string filePath = AssetBundleUtility.fileFolderName + "/" + fileName;
+                    fileOutPutPath = AssetBundleUtility.GetFileFolder() + "/" + fileName;
+                    IOManager.Instance.ReadFileFromStreamingAssetsPath(filePath, GetFileFinish);
+                }
+            }
+            else
+            {
+                string path = AssetBundleUtility.fileFolderName + "/" + AssetBundleUtility.fileName;
+                IOManager.Instance.WriteFileToPersistentDataPath(path, fileInfoBytes);
+                handler();
+            }
+        }
+        void GetFileFinish(WWW param)
+        {
+            index++;
+            IOManager.Instance.WriteFile(fileOutPutPath, param.bytes);
+            GetFile();
+        }
+        public IEnumerator DelateFileFolder()
+        {
+            string directory = AssetBundleUtility.GetFileFolder();
+            if (Directory.Exists(directory))
+                Directory.Delete(directory, true);
+            yield return new WaitForSeconds(0.2f);
+        }
     }
 }
