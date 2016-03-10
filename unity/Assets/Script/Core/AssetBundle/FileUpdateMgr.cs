@@ -132,7 +132,8 @@ namespace HiAssetBundle
             File.WriteAllBytes(filePath, paramWWW.bytes);
             updateList.RemoveAt(0);
             DownloadFile();
-            progress = 100 * (totalCount - updateList.Count) / totalCount;
+			if(updateList!=null)
+				progress =(totalCount - updateList.Count) / totalCount;
         }
         private void Finish()//when finish downloading whole files
         {
