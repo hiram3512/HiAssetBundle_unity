@@ -2,26 +2,29 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using System.Linq;
 namespace HiAssetBundle
 {
     public class FileUpdateMgr : IDisposable
     {
         public bool needUpdate { get { return updateList.Count > 0; } }
-        public float overallProgress { get; private set; }
+        public float length { get; private set; }
+        public float progress { get; private set; }
         private string url = "";
-        private Action finishCallBack;
-        private Dictionary<string, string> newDic = new Dictionary<string, string>();
+        private Action<float> finishCheckHandler;
+        private Action finishHandler;
+        private Dictionary<string, UpdateFileInfo> newDic = new Dictionary<string, UpdateFileInfo>();
         private List<string> updateList = new List<string>();
         private float totalCount;
         private bool disposed;
-        public void Init(string paramUrl, Action paramCallBack)
+        public void Init(string paramUrl, Action<float> paramCallBack)
         {
             url = paramUrl;
-            finishCallBack = paramCallBack;
+            finishCheckHandler = paramCallBack;
             SetNewDic();
         }
         #region only for test, will simulate update file from streamingAsset folder to user's data folder
-        public void SimulateServer_OnlyForTest(Action paramCallBack)
+        public void Init_OnlyForTest(Action<float> paramCallBack)
         {
 #if UNITY_EDITOR || UNITY_IPHONE
             string downloadUrl = "file://" + Application.streamingAssetsPath + "/" + AssetBundleUtility.fileFolderName;
@@ -48,27 +51,38 @@ namespace HiAssetBundle
                 if (string.IsNullOrEmpty(paramLine))
                     continue;
                 string[] keyValue = paramLine.Split('|');
-                newDic.Add(keyValue[0].Trim(), keyValue[1].Trim());
+                newDic.Add(keyValue[0].Trim(), new UpdateFileInfo(keyValue[1].Trim(), float.Parse(keyValue[2].Trim())));
             }
             GetUpdateDic();
         }
         private void GetUpdateDic()
         {
-            foreach (KeyValuePair<string, string> param in newDic)
+            foreach (KeyValuePair<string, UpdateFileInfo> param in newDic)
             {
                 string path = AssetBundleUtility.GetFileFolder() + "/" + param.Key;
                 if (File.Exists(path))
                 {
                     string md5 = AssetBundleUtility.GetMd5(path);
-                    if (!newDic.ContainsValue(md5))
+                    UpdateFileInfo info = newDic.Where(z => z.Value.md5 == md5).FirstOrDefault().Value;
+                    if (info == null)
                     {
                         updateList.Add(param.Key);
+                        length += param.Value.length;
                         File.Delete(path);
                     }
+
                 }
                 else
+                {
                     updateList.Add(param.Key);
+                    length += param.Value.length;
+                }
             }
+            finishCheckHandler(length);
+        }
+        public void StartUpdate(Action param)
+        {
+            finishHandler = param;
             CleanOldFile();
             if (needUpdate)
             {
@@ -78,6 +92,7 @@ namespace HiAssetBundle
             else
                 Finish();
         }
+
         private void CleanOldFile()
         {
             string fileFolder = AssetBundleUtility.GetFileFolder();
@@ -115,12 +130,12 @@ namespace HiAssetBundle
             File.WriteAllBytes(filePath, paramWWW.bytes);
             updateList.RemoveAt(0);
             DownloadFile();
-            overallProgress = 100 * (totalCount - updateList.Count) / totalCount;
+            progress = 100 * (totalCount - updateList.Count) / totalCount;
         }
         private void Finish()//when finish downloading whole files
         {
             AssetBundleMgr.Init();
-            finishCallBack();
+            finishHandler();
             Dispose();
         }
 
@@ -139,9 +154,19 @@ namespace HiAssetBundle
                 return;
             if (paramDisposing)
             {
-                finishCallBack = null;
+                finishHandler = null;
             }
             disposed = true;
+        }
+        private class UpdateFileInfo
+        {
+            public string md5;
+            public float length;
+            public UpdateFileInfo(string paramMd5, float paramLength)
+            {
+                md5 = paramMd5;
+                length = paramLength;
+            }
         }
     }
 }

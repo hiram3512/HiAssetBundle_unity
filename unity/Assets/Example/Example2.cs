@@ -7,7 +7,7 @@ public class Example2 : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        mgr.SimulateServer_OnlyForTest(FinishDownload);
+        mgr.Init_OnlyForTest(CheckFinish);
 
 
         //string url = "";
@@ -15,7 +15,11 @@ public class Example2 : MonoBehaviour
 
     }
 
-    void FinishDownload()
+    void CheckFinish(float param)
+    {
+        mgr.StartUpdate(UpdateFinish);
+    }
+    void UpdateFinish()
     {
         Debug.Log("finish");
     }
@@ -23,7 +27,7 @@ public class Example2 : MonoBehaviour
     void Update()
     {
         if (mgr.needUpdate)
-            Debug.Log(mgr.overallProgress);
+            Debug.Log(mgr.progress);
     }
 
     void OnGUI()

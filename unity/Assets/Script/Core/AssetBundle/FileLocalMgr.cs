@@ -2,17 +2,22 @@
 // Description:
 // Author: hiramtan@qq.com
 //****************************************************************************
-using UnityEngine;
-using System.Collections;
-using HiAssetBundle;
-using System.IO;
-using System;
 using HiIO;
+using System;
+using System.Collections;
+using System.IO;
+using UnityEngine;
 
 namespace HiAssetBundle
 {
     public class FileLocalMgr
     {
+        public float progress { get; private set; }
+        private Action handler;
+        private byte[] fileInfoBytes;
+        private string[] lines;
+        private int index;
+        private string fileOutPutPath;
         public void Init(Action param)
         {
             handler = param;
@@ -30,17 +35,13 @@ namespace HiAssetBundle
             string filePath = AssetBundleUtility.fileFolderName + "/" + AssetBundleUtility.fileName;
             IOManager.Instance.ReadFileFromStreamingAssetsPath(filePath, GetFileInfoFinish);
         }
-        private Action handler;
-        private byte[] fileInfoBytes;
-        private string[] liens;
-        private int index;
-        private string fileOutPutPath;
+
         void GetFileInfoFinish(WWW param)
         {
             if (param.text.Length > 0)
             {
                 fileInfoBytes = param.bytes;
-                liens = param.text.Split(new char[] { '\r', '\n' });
+                lines = param.text.Split(new char[] { '\r', '\n' });
                 GetFile();
             }
             else
@@ -48,12 +49,13 @@ namespace HiAssetBundle
         }
         void GetFile()
         {
-            if (liens.Length > index)
+            progress = (float)index / lines.Length;
+            if (lines.Length > index)
             {
-                if (string.IsNullOrEmpty(liens[index])) { index++; GetFile(); }
+                if (string.IsNullOrEmpty(lines[index])) { index++; GetFile(); }
                 else
                 {
-                    string[] keyValue = liens[index].Split('|');
+                    string[] keyValue = lines[index].Split('|');
                     string fileName = keyValue[0].Trim();
                     string filePath = AssetBundleUtility.fileFolderName + "/" + fileName;
                     fileOutPutPath = AssetBundleUtility.GetFileFolder() + "/" + fileName;

@@ -18,6 +18,7 @@ namespace HiAssetBundle
             CopyUpdateFiles();
             BuildAssetBundles();
             GenerateFileInfo();
+            MoveFileToStreamingAsset();
             Debug.Log("build finish");
         }
 
@@ -88,19 +89,18 @@ namespace HiAssetBundle
                 processed++;
                 EditorUtility.DisplayProgressBar("GenerateFile", "Progress", processed / total);
                 string fileInfo = paramFileInfo.FullName;
+                long length = paramFileInfo.Length;
                 string md5 = AssetBundleUtility.GetMd5(fileInfo);
                 fileInfo = fileInfo.Replace("\\", "/");
                 fileInfo = fileInfo.Replace(fileFolder + "/", string.Empty);
-                writer.WriteLine(fileInfo + "|" + md5);
+                writer.WriteLine(fileInfo + "|" + md5 + "|" + length);
             }
             EditorUtility.ClearProgressBar();
             writer.Close();
             stream.Close();
         }
-        [MenuItem("AssetBundles/Copy to StreamingAsset", false, 3)]
-        public static void CopyFileToStreamingAsset()
+        private static void MoveFileToStreamingAsset()
         {
-            Build();
             if (!Directory.Exists(Application.streamingAssetsPath))
                 Directory.CreateDirectory(Application.streamingAssetsPath);
             string directory = Application.streamingAssetsPath + "/" + AssetBundleUtility.fileFolderName;
@@ -108,7 +108,7 @@ namespace HiAssetBundle
                 Directory.Delete(directory, true);
             Directory.Move(AssetBundleUtility.GetFileOutPutFolder_OnlyForEditor(), directory);
             AssetDatabase.Refresh();
-            Debug.Log("simulate finish");
+            Debug.Log("move files to streamingasset finish");
         }
     }
 }
