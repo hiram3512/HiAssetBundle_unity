@@ -11,16 +11,17 @@ namespace HiAssetBundle
         public float length { get; private set; }
         public float progress { get; private set; }
         private string url = "";
-        private Action<float> finishCheckHandler;
+        private Action<float> checkFinishHandler;
         private Action finishHandler;
         private Dictionary<string, UpdateFileInfo> newDic = new Dictionary<string, UpdateFileInfo>();
         private List<string> updateList = new List<string>();
         private float totalCount;
+        private byte[] fileInfoBytes;
         private bool disposed;
         public void Init(string paramUrl, Action<float> paramCallBack)
         {
             url = paramUrl;
-            finishCheckHandler = paramCallBack;
+            checkFinishHandler = paramCallBack;
             SetNewDic();
         }
         #region only for test, will simulate update file from streamingAsset folder to user's data folder
@@ -44,6 +45,7 @@ namespace HiAssetBundle
         private void FinishDownloadFileInfo(WWW paramWWW)
         {
             newDic.Clear();
+            fileInfoBytes = paramWWW.bytes;
             string text = paramWWW.text;
             string[] lines = text.Split(new char[] { '\r', '\n' });
             foreach (string paramLine in lines)
@@ -78,7 +80,7 @@ namespace HiAssetBundle
                     length += param.Value.length;
                 }
             }
-            finishCheckHandler(length);
+            checkFinishHandler(length);
         }
         public void StartUpdate(Action param)
         {
@@ -134,6 +136,11 @@ namespace HiAssetBundle
         }
         private void Finish()//when finish downloading whole files
         {
+            string filePath = AssetBundleUtility.GetFileFolder() + "/" + AssetBundleUtility.fileName;
+            string directory = Path.GetDirectoryName(filePath);
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+            File.WriteAllBytes(filePath, fileInfoBytes);
             AssetBundleMgr.Init();
             finishHandler();
             Dispose();
@@ -154,6 +161,10 @@ namespace HiAssetBundle
                 return;
             if (paramDisposing)
             {
+                newDic = null;
+                updateList = null;
+                fileInfoBytes = null;
+                checkFinishHandler = null;
                 finishHandler = null;
             }
             disposed = true;
