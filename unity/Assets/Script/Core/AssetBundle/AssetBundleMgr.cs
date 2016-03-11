@@ -41,9 +41,15 @@ namespace HiAssetBundle
                     else
                     {
                         string path = AssetBundleUtility.GetAssetBundleFolder() + "/" + paramdependenceName;
-                        AssetBundle ab = AssetBundle.LoadFromFile(path);
-                        LoadedAssetBundle loadedAssetBundle = new LoadedAssetBundle(ab);
-                        loadedAssetBundles.Add(paramdependenceName, loadedAssetBundle);
+                        if (!File.Exists(path))
+                        {
+                            AssetBundle ab = AssetBundle.LoadFromFile(path);
+                            LoadedAssetBundle loadedAssetBundle = new LoadedAssetBundle(ab);
+                            loadedAssetBundles.Add(paramdependenceName, loadedAssetBundle);
+                        }
+                        //AssetBundle ab = AssetBundle.LoadFromFile(path);
+                        //LoadedAssetBundle loadedAssetBundle = new LoadedAssetBundle(ab);
+                        //loadedAssetBundles.Add(paramdependenceName, loadedAssetBundle);
                     }
                 }
             }
@@ -56,6 +62,8 @@ namespace HiAssetBundle
             else
             {
                 string assetBundlePath = AssetBundleUtility.GetAssetBundleFolder() + "/" + paramName;
+                if (!File.Exists(assetBundlePath))
+                    return null;
                 AssetBundle assetBundle = AssetBundle.LoadFromFile(assetBundlePath);
                 LoadedAssetBundle loadedAssetBundle = new LoadedAssetBundle(assetBundle);
                 loadedAssetBundles.Add(paramName, loadedAssetBundle);
