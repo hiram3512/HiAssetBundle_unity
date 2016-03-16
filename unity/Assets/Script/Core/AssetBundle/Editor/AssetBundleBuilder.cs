@@ -11,18 +11,18 @@ namespace HiAssetBundle
         [MenuItem("AssetBundles/Build AssetBundle", false, 0)]
         public static void Build()
         {
-            string fileFolder = AssetBundleUtility.GetFileOutPutFolder_OnlyForEditor();
+            string fileFolder = Application.streamingAssetsPath + "/" + AssetBundleUtility.fileFolderName;
             if (Directory.Exists(fileFolder))
                 Directory.Delete(fileFolder, true);
-            Directory.CreateDirectory(fileFolder);
-            CopyUpdateFiles();
-            BuildAssetBundles();
-            GenerateFileInfo();
-            MoveFileToStreamingAsset();
-            Debug.Log("build finish");
+            string assetBundleFolder = fileFolder + "/" + AssetBundleUtility.GetPlatformName(EditorUserBuildSettings.activeBuildTarget);
+            if (!Directory.Exists(assetBundleFolder))
+                Directory.CreateDirectory(assetBundleFolder);
+            BuildPipeline.BuildAssetBundles(assetBundleFolder, options, EditorUserBuildSettings.activeBuildTarget);
+            GenerateFileInfo(fileFolder);
+            Debug.Log("Finish build assetbundle");
         }
 
-        [MenuItem("AssetBundles/Clean User's Data", false, 3)]
+        [MenuItem("AssetBundles/Clean User's Data", false, 1)]
         public static void Clean()
         {
             string path = AssetBundleUtility.GetFileFolder();
@@ -30,55 +30,11 @@ namespace HiAssetBundle
                 Directory.Delete(path, true);
             Debug.Log("clean finish");
         }
-        private static void CopyUpdateFiles()
+        private static void GenerateFileInfo(string param)
         {
-            string updatePath = Application.dataPath + "/" + AssetBundleUtility.updateFolderName;
-            if (!Directory.Exists(updatePath))
-                return;
-            DirectoryInfo directoryInfo = new DirectoryInfo(updatePath);
-            FileInfo[] fileInfos = directoryInfo.GetFiles("*.*", SearchOption.AllDirectories);
-            string outPath = AssetBundleUtility.GetFileOutPutFolder_OnlyForEditor() + "/" + AssetBundleUtility.updateFolderName;
-            if (Directory.Exists(outPath))
-                Directory.Delete(outPath, true);
-            Directory.CreateDirectory(outPath);
-            float total, processed = 0;
-            total = fileInfos.Length;
-            foreach (FileInfo paramFileInfo in fileInfos)
-            {
-                processed++;
-                EditorUtility.DisplayProgressBar("CopyFile", "Progress", processed / total);
-                string info = paramFileInfo.FullName;
-                if (info.EndsWith(".meta"))
-                    continue;
-                info = info.Replace("\\", "/");
-                string newfile = info.Replace(updatePath, string.Empty);
-                string newpath = outPath + newfile;
-                newpath = newpath.Replace(" ", string.Empty);
-                string path = Path.GetDirectoryName(newpath);
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
-                if (File.Exists(newpath))
-                    File.Delete(newpath);
-                File.Copy(info, newpath, true);
-            }
-            EditorUtility.ClearProgressBar();
-        }
-        private static void BuildAssetBundles()
-        {
-            string outPath = AssetBundleUtility.GetFileOutPutFolder_OnlyForEditor() + "/" +
-                AssetBundleUtility.GetPlatformName(EditorUserBuildSettings.activeBuildTarget);
-            if (Directory.Exists(outPath))
-                Directory.Delete(outPath, true);
-            Directory.CreateDirectory(outPath);
-            BuildPipeline.BuildAssetBundles(outPath, options, EditorUserBuildSettings.activeBuildTarget);
-        }
-        private static void GenerateFileInfo()
-        {
-            string fileFolder = AssetBundleUtility.GetFileOutPutFolder_OnlyForEditor();
+            string fileFolder = param;
             DirectoryInfo directoryInfo = new DirectoryInfo(fileFolder);
             string fileInfoPath = fileFolder + "/" + AssetBundleUtility.fileName;
-            if (File.Exists(fileInfoPath))
-                File.Delete(fileInfoPath);
             FileInfo[] fileInfos = directoryInfo.GetFiles("*.*", SearchOption.AllDirectories);
             FileStream stream = new FileStream(fileInfoPath, FileMode.CreateNew);
             StreamWriter writer = new StreamWriter(stream);
@@ -87,7 +43,7 @@ namespace HiAssetBundle
             foreach (FileInfo paramFileInfo in fileInfos)
             {
                 processed++;
-                EditorUtility.DisplayProgressBar("GenerateFile", "Progress", processed / total);
+                EditorUtility.DisplayProgressBar(AssetBundleUtility.fileName, "Progress", processed / total);
                 string fileInfo = paramFileInfo.FullName;
                 long length = paramFileInfo.Length;
                 string md5 = AssetBundleUtility.GetMd5(fileInfo);
@@ -98,17 +54,6 @@ namespace HiAssetBundle
             EditorUtility.ClearProgressBar();
             writer.Close();
             stream.Close();
-        }
-        private static void MoveFileToStreamingAsset()
-        {
-            if (!Directory.Exists(Application.streamingAssetsPath))
-                Directory.CreateDirectory(Application.streamingAssetsPath);
-            string directory = Application.streamingAssetsPath + "/" + AssetBundleUtility.fileFolderName;
-            if (Directory.Exists(directory))
-                Directory.Delete(directory, true);
-            Directory.Move(AssetBundleUtility.GetFileOutPutFolder_OnlyForEditor(), directory);
-            AssetDatabase.Refresh();
-            Debug.Log("move files to streamingasset finish");
         }
     }
 }

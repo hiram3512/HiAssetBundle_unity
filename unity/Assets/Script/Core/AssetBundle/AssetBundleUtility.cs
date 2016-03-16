@@ -12,7 +12,6 @@ namespace HiAssetBundle
     {
         public static readonly string fileFolderName = "File";
         public static readonly string fileName = "file.txt";
-        public static readonly string updateFolderName = "Lua";
         public static string GetFileFolder()
         {
             return Application.persistentDataPath + "/" + fileFolderName;
@@ -28,26 +27,17 @@ namespace HiAssetBundle
 #endif
             return directory;
         }
-        public static string GetLuaFolder()
-        {
-            return GetFileFolder() + "/" + updateFolderName;
-        }
         public static string GetManifestPath()
         {
 #if UNITY_EDITOR
             string directory = GetAssetBundleFolder() + "/" +
-                               GetPlatformName(EditorUserBuildSettings.activeBuildTarget);
+                GetPlatformName(EditorUserBuildSettings.activeBuildTarget);
 #else
-                    string directory = GetAssetBundleFolder() + "/" + GetPlatformName(Application.platform);
+            string directory1 = GetAssetBundleFolder() + "/" +
+                GetPlatformName(Application.platform);
 #endif
             return directory;
         }
-#if UNITY_EDITOR
-        public static string GetFileOutPutFolder_OnlyForEditor()
-        {
-            return Application.dataPath.Substring(0, Application.dataPath.IndexOf("/Assets")) + "/" + fileFolderName;
-        }
-#endif
         public static string GetMd5(string file)
         {
             try
@@ -56,7 +46,6 @@ namespace HiAssetBundle
                 System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
                 byte[] retVal = md5.ComputeHash(fs);
                 fs.Close();
-
                 System.Text.StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < retVal.Length; i++)
                 {
