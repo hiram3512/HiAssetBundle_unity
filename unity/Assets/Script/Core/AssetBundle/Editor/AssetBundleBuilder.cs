@@ -8,27 +8,40 @@ namespace HiAssetBundle
     {
         private static BuildAssetBundleOptions options = BuildAssetBundleOptions.UncompressedAssetBundle;
 
-        [MenuItem("AssetBundles/Build AssetBundle", false, 0)]
-        public static void Build()
+        [MenuItem("AssetBundles/Build AssetBundle(windows)", false, 0)]
+        public static void BuildWindows()
         {
-            string fileFolder = Application.streamingAssetsPath + "/" + AssetBundleUtility.fileFolderName;
-            if (Directory.Exists(fileFolder))
-                Directory.Delete(fileFolder, true);
-            string assetBundleFolder = fileFolder + "/" + AssetBundleUtility.GetPlatformName(EditorUserBuildSettings.activeBuildTarget);
-            if (!Directory.Exists(assetBundleFolder))
-                Directory.CreateDirectory(assetBundleFolder);
-            BuildPipeline.BuildAssetBundles(assetBundleFolder, options, EditorUserBuildSettings.activeBuildTarget);
-            GenerateFileInfo(fileFolder);
-            Debug.Log("Finish build assetbundle");
+            Build(BuildTarget.StandaloneWindows);
         }
-
-        [MenuItem("AssetBundles/Clean User's Data", false, 1)]
+        [MenuItem("AssetBundles/Build AssetBundle(ios)", false, 1)]
+        public static void BuildIos()
+        {
+            Build(BuildTarget.iOS);
+        }
+        [MenuItem("AssetBundles/Build AssetBundle(android)", false, 2)]
+        public static void BuildAndroid()
+        {
+            Build(BuildTarget.Android);
+        }
+        [MenuItem("AssetBundles/Clean User's Data", false, 10)]
         public static void Clean()
         {
             string path = AssetBundleUtility.GetFileFolder();
             if (Directory.Exists(path))
                 Directory.Delete(path, true);
             Debug.Log("clean finish");
+        }
+        private static void Build(BuildTarget param)
+        {
+            string fileFolder = Application.streamingAssetsPath + "/" + AssetBundleUtility.fileFolderName;
+            if (Directory.Exists(fileFolder))
+                Directory.Delete(fileFolder, true);
+            string assetBundleFolder = fileFolder + "/" + AssetBundleUtility.GetPlatformName(param);
+            if (!Directory.Exists(assetBundleFolder))
+                Directory.CreateDirectory(assetBundleFolder);
+            BuildPipeline.BuildAssetBundles(assetBundleFolder, options, param);
+            GenerateFileInfo(fileFolder);
+            Debug.Log("Finish build assetbundle");
         }
         private static void GenerateFileInfo(string param)
         {
@@ -45,11 +58,13 @@ namespace HiAssetBundle
                 processed++;
                 EditorUtility.DisplayProgressBar(AssetBundleUtility.fileName, "Progress", processed / total);
                 string fileInfo = paramFileInfo.FullName;
+                if (fileInfo.EndsWith(".meta"))
+                    continue;
                 long length = paramFileInfo.Length;
                 string md5 = AssetBundleUtility.GetMd5(fileInfo);
                 fileInfo = fileInfo.Replace("\\", "/");
                 fileInfo = fileInfo.Replace(fileFolder + "/", string.Empty);
-                writer.WriteLine(fileInfo + "|" + md5 + "|" + length);
+                writer.WriteLine(md5 + "|" + fileInfo + "|" + length);
             }
             EditorUtility.ClearProgressBar();
             writer.Close();

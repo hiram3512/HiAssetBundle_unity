@@ -56,7 +56,7 @@ namespace HiAssetBundle
                 else
                 {
                     string[] keyValue = lines[index].Split('|');
-                    string fileName = keyValue[0].Trim();
+                    string fileName = keyValue[1].Trim();
                     string filePath = AssetBundleUtility.fileFolderName + "/" + fileName;
                     fileOutPutPath = AssetBundleUtility.GetFileFolder() + "/" + fileName;
                     IOManager.Instance.ReadFileFromStreamingAssetsPath(filePath, GetFileFinish);

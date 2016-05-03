@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using System.Linq;
+//using System.Linq;
 namespace HiAssetBundle
 {
     public class FileUpdateMgr : IDisposable
     {
         public bool needUpdate { get { return updateList.Count > 0; } }
-        public float length { get; private set; }
         public float progress { get; private set; }
-        private string url = "";
+        private string url;
         private Action<float> checkFinishHandler;
         private Action finishHandler;
         private Dictionary<string, UpdateFileInfo> newDic = new Dictionary<string, UpdateFileInfo>();
@@ -55,37 +54,22 @@ namespace HiAssetBundle
                 string[] keyValue = paramLine.Split('|');
                 newDic.Add(keyValue[0].Trim(), new UpdateFileInfo(keyValue[1].Trim(), float.Parse(keyValue[2].Trim())));
             }
+            CompareFile();
             GetUpdateDic();
         }
         private void GetUpdateDic()
         {
-            foreach (KeyValuePair<string, UpdateFileInfo> param in newDic)
+            float length = 0;
+            foreach (UpdateFileInfo param in newDic.Values)
             {
-                string path = AssetBundleUtility.GetFileFolder() + "/" + param.Key;
-                if (File.Exists(path))
-                {
-                    string md5 = AssetBundleUtility.GetMd5(path);
-                    UpdateFileInfo info = newDic.Where(z => z.Value.md5 == md5).FirstOrDefault().Value;
-                    if (info == null)
-                    {
-                        updateList.Add(param.Key);
-                        length += param.Value.length;
-                        File.Delete(path);
-                    }
-
-                }
-                else
-                {
-                    updateList.Add(param.Key);
-                    length += param.Value.length;
-                }
+                length += param.length;
+                updateList.Add(param.path);
             }
             checkFinishHandler(length);
         }
         public void StartUpdate(Action param)
         {
             finishHandler = param;
-            CleanOldFile();
             if (needUpdate)
             {
                 totalCount = updateList.Count;
@@ -95,7 +79,7 @@ namespace HiAssetBundle
                 Finish();
         }
 
-        private void CleanOldFile()
+        private void CompareFile()
         {
             string fileFolder = AssetBundleUtility.GetFileFolder();
             if (!Directory.Exists(fileFolder))
@@ -105,12 +89,13 @@ namespace HiAssetBundle
             foreach (FileInfo paramInfo in fileInfos)
             {
                 string filePath = paramInfo.FullName.Replace("\\", "/");
-                filePath = filePath.Replace(AssetBundleUtility.GetFileFolder() + "/", string.Empty);
-                if (!newDic.ContainsKey(filePath))
-                {
-                    if (File.Exists(paramInfo.FullName))
-                        File.Delete(paramInfo.FullName);
-                }
+                if (filePath == AssetBundleUtility.GetFileFolder() + "/" + AssetBundleUtility.fileName)
+                    continue;
+                string md5 = AssetBundleUtility.GetMd5(filePath);
+                if (newDic.ContainsKey(md5))
+                    newDic.Remove(md5);//don't need update
+                else
+                    File.Delete(filePath);//clean old file
             }
         }
         private void DownloadFile()
@@ -132,8 +117,8 @@ namespace HiAssetBundle
             File.WriteAllBytes(filePath, paramWWW.bytes);
             updateList.RemoveAt(0);
             DownloadFile();
-			if(updateList!=null)
-				progress =(totalCount - updateList.Count) / totalCount;
+            if (updateList != null)
+                progress = (totalCount - updateList.Count) / totalCount;
         }
         private void Finish()//when finish downloading whole files
         {
@@ -172,11 +157,11 @@ namespace HiAssetBundle
         }
         private class UpdateFileInfo
         {
-            public string md5;
+            public string path;
             public float length;
-            public UpdateFileInfo(string paramMd5, float paramLength)
+            public UpdateFileInfo(string paramPath, float paramLength)
             {
-                md5 = paramMd5;
+                path = paramPath;
                 length = paramLength;
             }
         }
