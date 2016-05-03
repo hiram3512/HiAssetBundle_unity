@@ -23,12 +23,19 @@ public class ResourceMgr
             return instance;
         }
     }
+    /// <summary>
+    /// Important: paramName must include extension, for example "tank.prefab"
+    /// </summary>
+    /// <param name="paramFolder"></param>
+    /// <param name="paramName"></param>
+    /// <returns></returns>
     public Object GetObj(string paramFolder, string paramName)
     {
 #if UNITY_EDITOR
-        var temp = "Assets" + "/" + paramFolder + "/" + paramName + ".prefab";
+        var temp = "Assets/" + paramFolder + "/" + paramName;
         return AssetDatabase.LoadAssetAtPath(temp, typeof(Object));
 #endif
+        paramName = paramName.Remove(paramName.LastIndexOf("."));
         AssetBundle tempAB = AssetBundleMgr.GetAssetBundle(paramFolder);
         if (tempAB != null && tempAB.Contains(paramName))
             return tempAB.LoadAsset(paramName);
