@@ -35,6 +35,7 @@ public class ResourceMgr
         var temp = "Assets/" + paramFolder + "/" + paramName;
         return AssetDatabase.LoadAssetAtPath(temp, typeof(Object));
 #endif
+        paramFolder = paramFolder.Replace("/", "");
         paramName = paramName.Remove(paramName.LastIndexOf("."));
         AssetBundle tempAB = AssetBundleMgr.GetAssetBundle(paramFolder);
         if (tempAB != null && tempAB.Contains(paramName))

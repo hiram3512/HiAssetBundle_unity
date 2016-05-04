@@ -89,7 +89,7 @@ namespace HiAssetBundle
                 tempPath = tempPath.Substring(tempIndex);
                 tempIndex = tempPath.LastIndexOf("/");
                 tempPath = tempPath.Substring(0, tempIndex);
-                tempPath = tempPath.Replace("/", "_");
+                tempPath = tempPath.Replace("/", "");
                 if (tempAImporter != null)
                     tempAImporter.assetBundleName = tempPath;
                 else
