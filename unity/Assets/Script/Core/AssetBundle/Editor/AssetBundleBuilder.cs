@@ -70,5 +70,27 @@ namespace HiAssetBundle
             writer.Close();
             stream.Close();
         }
+
+
+        [MenuItem("AssetBundles/debug", false, 12)]
+        private static void NamePrefab()
+        {
+            string test = Application.dataPath + "/Example";
+            DirectoryInfo tempDInfo = new DirectoryInfo(test);
+            FileInfo[] tempFInfo = tempDInfo.GetFiles("*.prefab", SearchOption.AllDirectories);
+            foreach (var VARIABLE in tempFInfo)
+            {
+                string tempPath = VARIABLE.ToString();
+                tempPath = tempPath.Replace(@"\", " / ");
+                tempPath = tempPath.Substring(tempPath.IndexOf("Assets"));
+                AssetImporter tempAImporter = AssetImporter.GetAtPath(tempPath);
+                int tempIndex = tempPath.IndexOf("/") + 1;
+                tempPath = tempPath.Substring(tempIndex);
+                tempIndex = tempPath.LastIndexOf("/");
+                tempPath = tempPath.Substring(0, tempIndex);
+                tempPath = tempPath.Replace(" ", "");
+                tempAImporter.assetBundleName = tempPath;
+            }
+        }
     }
 }
