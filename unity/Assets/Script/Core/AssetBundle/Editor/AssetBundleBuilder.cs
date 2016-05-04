@@ -72,7 +72,7 @@ namespace HiAssetBundle
         }
 
 
-        [MenuItem("AssetBundles/debug", false, 12)]
+        [MenuItem("AssetBundles/SetName", false, 12)]
         private static void NamePrefab()
         {
             string test = Application.dataPath + "/Example";
@@ -82,15 +82,20 @@ namespace HiAssetBundle
             {
                 string tempPath = VARIABLE.ToString();
                 tempPath = tempPath.Replace(@"\", " / ");
+                tempPath = tempPath.Replace(" ", "");
                 tempPath = tempPath.Substring(tempPath.IndexOf("Assets"));
                 AssetImporter tempAImporter = AssetImporter.GetAtPath(tempPath);
                 int tempIndex = tempPath.IndexOf("/") + 1;
                 tempPath = tempPath.Substring(tempIndex);
                 tempIndex = tempPath.LastIndexOf("/");
                 tempPath = tempPath.Substring(0, tempIndex);
-                tempPath = tempPath.Replace(" ", "");
                 tempPath = tempPath.Replace("/", "_");
-                tempAImporter.assetBundleName = tempPath;
+                if (tempAImporter != null)
+                    tempAImporter.assetBundleName = tempPath;
+                else
+                {
+                    Debug.LogError("Error");
+                }
             }
         }
     }
