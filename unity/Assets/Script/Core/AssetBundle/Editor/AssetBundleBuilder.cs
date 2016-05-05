@@ -75,8 +75,8 @@ namespace HiAssetBundle
         [MenuItem("AssetBundles/SetName", false, 12)]
         private static void NamePrefab()
         {
-            string test = Application.dataPath + "/Example";
-            DirectoryInfo tempDInfo = new DirectoryInfo(test);
+            string tempPrefabPath = Application.dataPath + "/Example";
+            DirectoryInfo tempDInfo = new DirectoryInfo(tempPrefabPath);
             FileInfo[] tempFInfo = tempDInfo.GetFiles("*.prefab", SearchOption.AllDirectories);
             foreach (var VARIABLE in tempFInfo)
             {
@@ -90,12 +90,11 @@ namespace HiAssetBundle
                 tempIndex = tempPath.LastIndexOf("/");
                 tempPath = tempPath.Substring(0, tempIndex);
                 tempPath = tempPath.Replace("/", "");
+                tempPath = tempPath.ToLower();
                 if (tempAImporter != null)
                     tempAImporter.assetBundleName = tempPath;
                 else
-                {
-                    Debug.LogError("Error");
-                }
+                    Debug.LogError("this prefab cann't set name: +" + tempPath);
             }
         }
     }

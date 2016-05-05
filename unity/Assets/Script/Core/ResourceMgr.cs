@@ -36,11 +36,12 @@ public class ResourceMgr
         return AssetDatabase.LoadAssetAtPath(temp, typeof(Object));
 #endif
         paramFolder = paramFolder.Replace("/", "");
+        paramFolder = paramFolder.ToLower();
         paramName = paramName.Remove(paramName.LastIndexOf("."));
+        paramName = paramName.ToLower();
         AssetBundle tempAB = AssetBundleMgr.GetAssetBundle(paramFolder);
         if (tempAB != null && tempAB.Contains(paramName))
             return tempAB.LoadAsset(paramName);
-
         Debug.LogError("the things you want to load is null");
         return null;
     }
