@@ -71,9 +71,40 @@ namespace HiAssetBundle
             stream.Close();
         }
 
+        [MenuItem("AssetBundles/Rename sources a new name", false, 11)]
+        private static void RenameSources()
+        {
+            string tempSourcesPath = Application.dataPath + "/Art";
+            string tempSplit = "#";//use this sign to split directory
 
-        [MenuItem("AssetBundles/SetName", false, 12)]
-        private static void NamePrefab()
+            DirectoryInfo tempDInfo = new DirectoryInfo(tempSourcesPath);
+            FileInfo[] tempFInfo = tempDInfo.GetFiles("*.*", SearchOption.AllDirectories);
+            foreach (var param in tempFInfo)
+            {
+                string tempPath = param.ToString();
+                if (tempPath.EndsWith(".meta"))
+                    continue;
+                if (tempPath.Contains(tempSplit))//already name it, donnt need to rename it again
+                    continue;
+                tempPath = tempPath.ToLower();
+                tempPath = tempPath.Replace(@"\", "/");
+                tempPath = tempPath.Replace(" ", "");
+                tempPath = tempPath.Substring(tempPath.IndexOf("Assets"));
+                AssetImporter tempAImporter = AssetImporter.GetAtPath(tempPath);
+                int tempIndex = tempPath.IndexOf("/") + 1;
+                tempPath = tempPath.Substring(tempIndex);
+                tempIndex = tempPath.LastIndexOf("/");
+                tempPath = tempPath.Substring(0, tempIndex);
+                tempPath = tempPath.Replace("/", tempSplit);
+                if (tempAImporter != null)
+                    tempAImporter.name = tempPath;
+                else
+                    Debug.LogError("cannt rename this file");
+            }
+        }
+
+        [MenuItem("AssetBundles/Set prefab a assetbundle name", false, 12)]
+        private static void SetPrefabAAssetBundleName()
         {
             string tempPrefabPath = Application.dataPath + "/Example";
             DirectoryInfo tempDInfo = new DirectoryInfo(tempPrefabPath);
