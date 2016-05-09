@@ -71,20 +71,36 @@ namespace HiAssetBundle
             stream.Close();
         }
 
+        /// <summary>
+        /// use mouse select folder in unity editor, then click"AssetBundles/Rename sources a new name"button to rename sources
+        /// note: only can select one folder at one time
+        /// </summary>
         [MenuItem("AssetBundles/Rename sources a new name", false, 11)]
         private static void RenameSources()
         {
-            string tempSourcesPath = Application.dataPath + "/Art";
             string tempSplit = "#";//use this sign to split directory
 
-            DirectoryInfo tempDInfo = new DirectoryInfo(tempSourcesPath);
+            string tempSelectedFolder = "";
+            foreach (UnityEngine.Object obj in Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.Assets))
+            {
+                tempSelectedFolder = AssetDatabase.GetAssetPath(obj);
+                if (!string.IsNullOrEmpty(tempSelectedFolder) && File.Exists(tempSelectedFolder))
+                {
+                    tempSelectedFolder = Path.GetDirectoryName(tempSelectedFolder);
+                    break;
+                }
+            }
+            if (string.IsNullOrEmpty(tempSelectedFolder))
+                return;
+            tempSelectedFolder = tempSelectedFolder.Replace("Assets", Application.dataPath);
+            DirectoryInfo tempDInfo = new DirectoryInfo(tempSelectedFolder);
             FileInfo[] tempFInfo = tempDInfo.GetFiles("*.*", SearchOption.AllDirectories);
             float tempProcessed = 0;
             float tempTotal = tempFInfo.Length;
             foreach (var param in tempFInfo)
             {
                 tempProcessed++;
-                EditorUtility.DisplayProgressBar("Progress",param.Name,tempProcessed/tempTotal);
+                EditorUtility.DisplayProgressBar("Progress", param.Name, tempProcessed / tempTotal);
                 string tempPath = param.ToString();
                 if (tempPath.EndsWith(".meta"))
                     continue;
