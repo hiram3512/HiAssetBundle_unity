@@ -79,8 +79,12 @@ namespace HiAssetBundle
 
             DirectoryInfo tempDInfo = new DirectoryInfo(tempSourcesPath);
             FileInfo[] tempFInfo = tempDInfo.GetFiles("*.*", SearchOption.AllDirectories);
+            float tempProcessed = 0;
+            float tempTotal = tempFInfo.Length;
             foreach (var param in tempFInfo)
             {
+                tempProcessed++;
+                EditorUtility.DisplayProgressBar("Progress",param.Name,tempProcessed/tempTotal);
                 string tempPath = param.ToString();
                 if (tempPath.EndsWith(".meta"))
                     continue;
@@ -97,6 +101,7 @@ namespace HiAssetBundle
                 if (!string.IsNullOrEmpty(tempError))
                     Debug.Log(tempError);
             }
+            EditorUtility.ClearProgressBar();
             AssetDatabase.Refresh();
         }
 
