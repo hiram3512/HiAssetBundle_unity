@@ -86,21 +86,18 @@ namespace HiAssetBundle
                     continue;
                 if (tempPath.Contains(tempSplit))//already name it, donnt need to rename it again
                     continue;
-                tempPath = tempPath.ToLower();
                 tempPath = tempPath.Replace(@"\", "/");
-                tempPath = tempPath.Replace(" ", "");
                 tempPath = tempPath.Substring(tempPath.IndexOf("Assets"));
-                AssetImporter tempAImporter = AssetImporter.GetAtPath(tempPath);
                 int tempIndex = tempPath.IndexOf("/") + 1;
-                tempPath = tempPath.Substring(tempIndex);
-                tempIndex = tempPath.LastIndexOf("/");
-                tempPath = tempPath.Substring(0, tempIndex);
-                tempPath = tempPath.Replace("/", tempSplit);
-                if (tempAImporter != null)
-                    tempAImporter.name = tempPath;
-                else
-                    Debug.LogError("cannt rename this file");
+                string tempName = tempPath.Substring(tempIndex);
+                tempIndex = tempName.LastIndexOf(".");
+                tempName = tempName.Substring(0, tempIndex);
+                tempName = tempName.Replace("/", tempSplit);
+                string tempError = AssetDatabase.RenameAsset(tempPath, tempName);
+                if (!string.IsNullOrEmpty(tempError))
+                    Debug.Log(tempError);
             }
+            AssetDatabase.Refresh();
         }
 
         [MenuItem("AssetBundles/Set prefab a assetbundle name", false, 12)]
