@@ -1,4 +1,4 @@
-﻿//*********************************************************************
+//*********************************************************************
 // Description:
 // Author: hiramtan@live.com
 //*********************************************************************
@@ -29,8 +29,12 @@ public class ResourceMgr
     /// <param name="paramFolder"></param>
     /// <param name="paramName"></param>
     /// <returns></returns>
-    public Object GetObj(string paramFolder, string paramName)
+    public Object GetObj(string param)
     {
+        int tempIndex = param.LastIndexOf("#");
+        string paramFolder = param.Substring(0, tempIndex);
+        paramFolder = paramFolder.Replace("#", "/");
+        string paramName = param.Substring(tempIndex + 1);
 #if UNITY_EDITOR
         var temp = "Assets/" + paramFolder + "/" + paramName;
         return AssetDatabase.LoadAssetAtPath(temp, typeof(Object));
@@ -46,9 +50,9 @@ public class ResourceMgr
         return null;
     }
 
-    public GameObject GetGameObject(string paramFolder, string paramName)
+    public GameObject GetGameObject(string param)
     {
-        var temp = GetObj(paramFolder, paramName);
+        var temp = GetObj(param);
         if (temp != null)
             return (GameObject)MonoBehaviour.Instantiate(temp);
         return null;
