@@ -135,9 +135,7 @@ namespace HiAssetBundle
             {
                 fileName = tempFInfo[i].Name.ToLower();
                 if (fileName.EndsWith(".prefab") || fileName.EndsWith(".mat"))
-                {
                     tempList.Add(fileName);
-                }
             }
             foreach (var VARIABLE in tempFInfo)
             {
