@@ -129,13 +129,12 @@ namespace HiAssetBundle
             string tempPrefabPath = Application.dataPath + "/Example";
             DirectoryInfo tempDInfo = new DirectoryInfo(tempPrefabPath);
             FileInfo[] tempFInfo = tempDInfo.GetFiles("*.*", SearchOption.AllDirectories);
-            string fileName;
             IList<string> tempList = new List<string>();
             for (int i = 0; i < tempFInfo.Length; i++)
             {
-                fileName = tempFInfo[i].Name.ToLower();
-                if (fileName.EndsWith(".prefab") || fileName.EndsWith(".mat"))
-                    tempList.Add(fileName);
+                string tempFileName = tempFInfo[i].Name.ToLower();
+                if (tempFileName.EndsWith(".prefab") || tempFileName.EndsWith(".mat"))
+                    tempList.Add(tempFileName);
             }
             foreach (var VARIABLE in tempFInfo)
             {
