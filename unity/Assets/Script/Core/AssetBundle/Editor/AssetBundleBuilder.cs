@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
+using System.Collections.Generic;
+
 
 namespace HiAssetBundle
 {
@@ -78,7 +80,7 @@ namespace HiAssetBundle
         [MenuItem("AssetBundles/Rename sources a new name", false, 11)]
         private static void RenameSources()
         {
-            string tempSplit = "#";//use this sign to split directory
+            string tempSplit = "__";//use this sign to split directory
 
             string tempSelectedFolder = "";
             foreach (UnityEngine.Object obj in Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.Assets))
@@ -126,7 +128,17 @@ namespace HiAssetBundle
         {
             string tempPrefabPath = Application.dataPath + "/Example";
             DirectoryInfo tempDInfo = new DirectoryInfo(tempPrefabPath);
-            FileInfo[] tempFInfo = tempDInfo.GetFiles("*.prefab", SearchOption.AllDirectories);
+            FileInfo[] tempFInfo = tempDInfo.GetFiles("*.*", SearchOption.AllDirectories);
+            string fileName;
+            IList<string> tempList = new List<string>();
+            for (int i = 0; i < tempFInfo.Length; i++)
+            {
+                fileName = tempFInfo[i].Name.ToLower();
+                if (fileName.EndsWith(".prefab") || fileName.EndsWith(".mat"))
+                {
+                    tempList.Add(fileName);
+                }
+            }
             foreach (var VARIABLE in tempFInfo)
             {
                 string tempPath = VARIABLE.ToString();
