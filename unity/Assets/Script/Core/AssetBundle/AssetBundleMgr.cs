@@ -18,7 +18,11 @@ namespace HiAssetBundle
             string path = AssetBundleUtility.GetManifestPath();
             if (!File.Exists(path))
                 return;
+#if UNITY_5_3 || UNITY_5_3_OR_NEWER
             AssetBundle assetBundle = AssetBundle.LoadFromFile(path);
+#else
+            AssetBundle assetBundle = AssetBundle.CreateFromFile(path);
+#endif
             AssetBundleManifest assetBundleManifest = assetBundle.LoadAsset("assetbundlemanifest") as AssetBundleManifest;
             string[] assetBundleNames = assetBundleManifest.GetAllAssetBundles();
             foreach (string paramName in assetBundleNames)
@@ -43,7 +47,11 @@ namespace HiAssetBundle
                         string path = AssetBundleUtility.GetAssetBundleFolder() + "/" + paramdependenceName;
                         if (!File.Exists(path))
                         {
+#if UNITY_5_3 || UNITY_5_3_OR_NEWER
                             AssetBundle ab = AssetBundle.LoadFromFile(path);
+#else
+                            AssetBundle ab = AssetBundle.CreateFromFile(path);
+#endif
                             LoadedAssetBundle loadedAssetBundle = new LoadedAssetBundle(ab);
                             loadedAssetBundles.Add(paramdependenceName, loadedAssetBundle);
                         }
@@ -64,7 +72,13 @@ namespace HiAssetBundle
                 string assetBundlePath = AssetBundleUtility.GetAssetBundleFolder() + "/" + paramName;
                 if (!File.Exists(assetBundlePath))
                     return null;
+
+
+#if UNITY_5_3 || UNITY_5_3_OR_NEWER
                 AssetBundle assetBundle = AssetBundle.LoadFromFile(assetBundlePath);
+#else
+                AssetBundle assetBundle = AssetBundle.CreateFromFile(assetBundlePath);
+#endif
                 LoadedAssetBundle loadedAssetBundle = new LoadedAssetBundle(assetBundle);
                 loadedAssetBundles.Add(paramName, loadedAssetBundle);
                 return loadedAssetBundles[paramName].assetBundle;
