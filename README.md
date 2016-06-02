@@ -63,3 +63,6 @@ HiAssetBundle_unity
 
 >  - 访问本地streamingasset目录时,比如streamasset/new test.txt直接访问这个地址就可以了.为了保证一致,删除所有空格
 > - 注意unix系统(android/ios)的大小写敏感问题
+
+
+support: hiramtan@live.com
