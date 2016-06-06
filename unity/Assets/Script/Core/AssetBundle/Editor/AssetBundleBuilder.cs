@@ -8,7 +8,7 @@ namespace HiAssetBundle
 {
     public class AssetBundleBuider
     {
-        private static BuildAssetBundleOptions options = BuildAssetBundleOptions.UncompressedAssetBundle;
+        private static BuildAssetBundleOptions options = BuildAssetBundleOptions.None;
 
         [MenuItem("AssetBundles/Build AssetBundle(windows)", false, 0)]
         public static void BuildWindows()
