@@ -10,20 +10,10 @@ namespace HiAssetBundle
     {
         private static BuildAssetBundleOptions options = BuildAssetBundleOptions.None;
 
-        [MenuItem("AssetBundles/Build AssetBundle(windows)", false, 0)]
+        [MenuItem("AssetBundles/Build", false, 0)]
         public static void BuildWindows()
         {
-            Build(BuildTarget.StandaloneWindows);
-        }
-        [MenuItem("AssetBundles/Build AssetBundle(ios)", false, 1)]
-        public static void BuildIos()
-        {
-            Build(BuildTarget.iOS);
-        }
-        [MenuItem("AssetBundles/Build AssetBundle(android)", false, 2)]
-        public static void BuildAndroid()
-        {
-            Build(BuildTarget.Android);
+            Build(EditorUserBuildSettings.activeBuildTarget);
         }
         [MenuItem("AssetBundles/Clean User's Data", false, 10)]
         public static void Clean()
