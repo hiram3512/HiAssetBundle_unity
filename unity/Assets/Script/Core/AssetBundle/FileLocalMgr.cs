@@ -26,7 +26,7 @@ namespace HiAssetBundle
                 handler();
             else
             {
-                DelateFileFolder();
+                DeleteFileFolder();
                 GetFileInfo();
             }
         }
@@ -75,12 +75,18 @@ namespace HiAssetBundle
             IOManager.Instance.WriteFile(fileOutPutPath, param.bytes);
             GetFile();
         }
-        public IEnumerator DelateFileFolder()
+        void DeleteFileFolder()
         {
-            string directory = AssetBundleUtility.GetFileFolder();
-            if (Directory.Exists(directory))
-                Directory.Delete(directory, true);
-            yield return new WaitForSeconds(0.2f);
+            string tempD = AssetBundleUtility.GetFileFolder();
+            //if (!Directory.Exists(tempD))
+            //    return;
+            //DirectoryInfo tempDInfo = new DirectoryInfo(tempD);
+            //FileInfo[] tempFInfos = tempDInfo.GetFiles("*.*", SearchOption.AllDirectories);
+            //for (int i = 0; i < tempFInfos.Length; i++)
+            //    if (File.Exists(tempFInfos[i].Name))
+            //        File.Delete(tempFInfos[i].Name);
+            if (Directory.Exists(tempD))
+                Directory.Delete(tempD, true);
         }
     }
 }
