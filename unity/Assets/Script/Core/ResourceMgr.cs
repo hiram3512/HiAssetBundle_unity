@@ -31,9 +31,9 @@ public class ResourceMgr
     /// <returns></returns>
     public T GetObj<T>(string param) where T:UnityEngine.Object
     {
-        int tempIndex = param.LastIndexOf("#");
+        int tempIndex = param.LastIndexOf("__");
         string paramFolder = param.Substring(0, tempIndex);
-        paramFolder = paramFolder.Replace("#", "/");
+        paramFolder = paramFolder.Replace("__", "/");
         string paramName = param.Substring(tempIndex + 1);
 #if UNITY_EDITOR
         var temp = "Assets/" + paramFolder + "/" + paramName;
