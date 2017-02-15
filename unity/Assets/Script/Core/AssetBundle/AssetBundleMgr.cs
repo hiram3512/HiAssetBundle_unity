@@ -45,7 +45,7 @@ namespace HiAssetBundle
                     else
                     {
                         string path = AssetBundleUtility.GetAssetBundleFolder() + "/" + paramdependenceName;
-                        if (!File.Exists(path))
+                        if (File.Exists(path))
                         {
 #if UNITY_5_3 || UNITY_5_3_OR_NEWER
                             AssetBundle ab = AssetBundle.LoadFromFile(path);
