@@ -1,6 +1,6 @@
 //*********************************************************************
 // Description:
-// Author: hiramtan@live.com
+// Author: hiramtan@qq.com
 //*********************************************************************
 using UnityEngine;
 using System.Collections;

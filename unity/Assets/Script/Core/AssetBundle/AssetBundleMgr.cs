@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿//*********************************************************************
+// Description:
+// Author: hiramtan@qq.com
+//*********************************************************************
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -17,7 +21,11 @@ namespace HiAssetBundle
         {
             string path = AssetBundleUtility.GetManifestPath();
             if (!File.Exists(path))
+            {
+                Debug.LogError("can't find Manifest file");
                 return;
+            }
+
 #if UNITY_5_3 || UNITY_5_3_OR_NEWER
             AssetBundle assetBundle = AssetBundle.LoadFromFile(path);
 #else
@@ -55,6 +63,10 @@ namespace HiAssetBundle
                             LoadedAssetBundle loadedAssetBundle = new LoadedAssetBundle(ab);
                             loadedAssetBundles.Add(paramdependenceName, loadedAssetBundle);
                         }
+                        else
+                        {
+                            Debug.LogError("can't find ab file");
+                        }
                         //AssetBundle ab = AssetBundle.LoadFromFile(path);
                         //LoadedAssetBundle loadedAssetBundle = new LoadedAssetBundle(ab);
                         //loadedAssetBundles.Add(paramdependenceName, loadedAssetBundle);
@@ -67,12 +79,13 @@ namespace HiAssetBundle
                 loadedAssetBundles[paramName].dependenceCount++;
                 return loadedAssetBundles[paramName].assetBundle;
             }
-            else
             {
                 string assetBundlePath = AssetBundleUtility.GetAssetBundleFolder() + "/" + paramName;
                 if (!File.Exists(assetBundlePath))
+                {
+                    Debug.LogError("file not exist");
                     return null;
-
+                }
 
 #if UNITY_5_3 || UNITY_5_3_OR_NEWER
                 AssetBundle assetBundle = AssetBundle.LoadFromFile(assetBundlePath);

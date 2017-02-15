@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿//*********************************************************************
+// Description:
+// Author: hiramtan@qq.com
+//*********************************************************************
+using UnityEngine;
 using System.IO;
 using System.Text;
 using System;
