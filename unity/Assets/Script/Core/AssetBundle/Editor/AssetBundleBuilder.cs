@@ -8,7 +8,8 @@ namespace HiAssetBundle
 {
     public class AssetBundleBuider
     {
-        private static BuildAssetBundleOptions options = BuildAssetBundleOptions.None;
+        //private static BuildAssetBundleOptions options = BuildAssetBundleOptions.None;//none is defalt is lamz
+        private static BuildAssetBundleOptions options = BuildAssetBundleOptions.ChunkBasedCompression;//lz4 is much fast than lamz
 
         [MenuItem("AssetBundles/Build", false, 0)]
         public static void BuildWindows()
