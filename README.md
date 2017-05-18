@@ -4,6 +4,7 @@ HiAssetBundle_unity
 ----------
 **Menual**
 > - Rename assets(Select the folder which you want to rename it's assets, click the rename button on editor menu, then will rename assets recursively)
+> - Set assets a assetbundle name automatically(Select the folder, click the )
 ----------
 **功能说明:**
 
