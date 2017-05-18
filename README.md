@@ -3,10 +3,9 @@ HiAssetBundle_unity
 
 ----------
 **Menual**
-
+> - Rename assets(Select the folder which you want to rename it's assets, click the rename button on editor menu, then will rename assets recursively)
 ----------
-**主要功能说明:**
-
+**功能说明:**
 
 > - 资源重命名(鼠标选在文件夹,点击编辑器菜单下的重命名按钮,会重命名该文件夹下的所有文件)
 > -  快速设置AssetBundle的包名(点击文件夹,会自动把该文件夹下资源的ab的包名设置为文件夹的名字)
