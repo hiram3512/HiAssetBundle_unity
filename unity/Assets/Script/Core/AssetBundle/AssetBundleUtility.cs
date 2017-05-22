@@ -37,7 +37,7 @@ namespace HiAssetBundle
             string directory = GetAssetBundleFolder() + "/" +
                 GetPlatformName(EditorUserBuildSettings.activeBuildTarget);
 #else
-            string directory1 = GetAssetBundleFolder() + "/" +
+            string directory = GetAssetBundleFolder() + "/" +
                 GetPlatformName(Application.platform);
 #endif
             return directory;
