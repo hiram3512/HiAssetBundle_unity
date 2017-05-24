@@ -2,7 +2,7 @@ HiAssetBundle_unity
 ===================
 Put the whole asset bundles collections on a web server, then will automatically maintain local resources as server be.
 
-Web服务器放置一份完整asset bundle资源，自动维护本地资源与服务器一致。
+Unity中的热更新逻辑,Web服务器放置一份完整asset bundle资源，自动维护本地资源与服务器一致。
 
 
 ----------
