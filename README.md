@@ -1,5 +1,7 @@
 HiAssetBundle_unity
 ===================
+QQ群：83596104
+
 开源地址：[https://github.com/hiramtan/HiAssetBundle_unity](https://github.com/hiramtan/HiAssetBundle_unity "Title")
 
 Put the whole asset bundles collections on a web server, then will automatically maintain local resources as server be.
