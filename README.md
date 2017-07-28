@@ -1,6 +1,5 @@
 HiAssetBundle_unity
 ===================
-QQ群：83596104
 
 开源地址：[https://github.com/hiramtan/HiAssetBundle_unity](https://github.com/hiramtan/HiAssetBundle_unity "Title")
 
