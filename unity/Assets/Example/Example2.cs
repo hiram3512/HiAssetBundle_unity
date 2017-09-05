@@ -28,16 +28,18 @@ public class Example2 : MonoBehaviour
 
     void CheckFinish(float param)
     {
+        Debug.Log("should download:" + param);
         mgr.StartUpdate(UpdateFinish);
     }
     void UpdateFinish()
     {
-        Debug.Log("finish");
+        Debug.Log("download finish");
     }
     // Update is called once per frame
     void Update()
     {
-        if (mgr.needUpdate)
+        //for test:展示下载进度
+        if (mgr != null && mgr.needUpdate)
             Debug.Log(mgr.progress);
     }
 

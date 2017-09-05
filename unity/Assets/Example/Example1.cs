@@ -22,6 +22,7 @@ public class Example1 : MonoBehaviour
     {
         CopyFileFromAppToPersistentFolder();
     }
+
     void CopyFileFromAppToPersistentFolder()
     {
         FileLocalMgr mgr = new FileLocalMgr();
@@ -29,7 +30,10 @@ public class Example1 : MonoBehaviour
     }
     void CopyFinish()
     {
+        //复制结束
 
+        //检查网络更新资源
+        CheckHowManyFileNeedUpdate();
     }
     void CheckHowManyFileNeedUpdate()
     {
@@ -45,6 +49,6 @@ public class Example1 : MonoBehaviour
     }
     void DownloadFinish()
     {
-        Debug.Log("finish");
+        Debug.Log("download finish");
     }
 }
