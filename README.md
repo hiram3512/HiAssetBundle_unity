@@ -1,9 +1,15 @@
 HiAssetBundle_unity
 ===================
 
-----------
-**主要功能说明:**
+开源地址：[https://github.com/hiramtan/HiAssetBundle_unity](https://github.com/hiramtan/HiAssetBundle_unity "Title")
 
+Put the whole asset bundles collections on a web server, then will automatically maintain local resources as server be.
+
+Unity中的热更新逻辑,Web服务器放置一份完整asset bundle资源，自动维护本地资源与服务器一致。
+
+
+----------
+**功能说明:**
 
 > - 资源重命名(鼠标选在文件夹,点击编辑器菜单下的重命名按钮,会重命名该文件夹下的所有文件)
 > -  快速设置AssetBundle的包名(点击文件夹,会自动把该文件夹下资源的ab的包名设置为文件夹的名字)
@@ -67,3 +73,27 @@ HiAssetBundle_unity
 
 
 support: hiramtan@live.com
+
+***********
+
+MIT License
+
+Copyright (c) [2017] [Hiram]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
