@@ -114,19 +114,35 @@ namespace HiAssetBundle
             AssetDatabase.Refresh();
         }
 
-        [MenuItem("AssetBundles/Set prefab a assetbundle name", false, 12)]
-        private static void SetPrefabAAssetBundleName()
+        /// <summary>
+        /// use mouse select folder
+        /// </summary>
+        [MenuItem("AssetBundles/Set file an assetbundle name", false, 12)]
+        private static void SetFileAnAssetBundleName()
         {
-            string tempPrefabPath = Application.dataPath + "/Example";
-            DirectoryInfo tempDInfo = new DirectoryInfo(tempPrefabPath);
-            FileInfo[] tempFInfo = tempDInfo.GetFiles("*.*", SearchOption.AllDirectories);
-            IList<string> tempList = new List<string>();
-            for (int i = 0; i < tempFInfo.Length; i++)
+            string tempSelectedFolder = "";
+            foreach (UnityEngine.Object obj in Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.Assets))
             {
-                string tempFileName = tempFInfo[i].Name.ToLower();
-                if (tempFileName.EndsWith(".prefab") || tempFileName.EndsWith(".mat"))
-                    tempList.Add(tempFileName);
+                tempSelectedFolder = AssetDatabase.GetAssetPath(obj);
+                if (!string.IsNullOrEmpty(tempSelectedFolder) && File.Exists(tempSelectedFolder))
+                {
+                    tempSelectedFolder = Path.GetDirectoryName(tempSelectedFolder);
+                    break;
+                }
             }
+            if (string.IsNullOrEmpty(tempSelectedFolder))
+                return;
+
+            //string tempPrefabPath = Application.dataPath + "/Example";
+            DirectoryInfo tempDInfo = new DirectoryInfo(tempSelectedFolder);
+            FileInfo[] tempFInfo = tempDInfo.GetFiles("*.*", SearchOption.AllDirectories);
+            //IList<string> tempList = new List<string>();
+            //for (int i = 0; i < tempFInfo.Length; i++)
+            //{
+            //    string tempFileName = tempFInfo[i].Name.ToLower();
+            //    if (tempFileName.EndsWith(".prefab") || tempFileName.EndsWith(".mat"))
+            //        tempList.Add(tempFileName);
+            //}
             foreach (var VARIABLE in tempFInfo)
             {
                 string tempPath = VARIABLE.ToString();
