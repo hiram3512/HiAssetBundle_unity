@@ -3,8 +3,6 @@ HiAssetBundle_unity
 
 开源地址：[https://github.com/hiramtan/HiAssetBundle_unity](https://github.com/hiramtan/HiAssetBundle_unity "Title")
 
-Put the whole asset bundles collections on a web server, then will automatically maintain local resources as server be.
-
 Unity中的热更新逻辑,Web服务器放置一份完整asset bundle资源，自动维护本地资源与服务器一致。
 
 
